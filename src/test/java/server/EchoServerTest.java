@@ -7,6 +7,6 @@ import static org.junit.jupiter.api.Assertions.*;
 class EchoServerTest {
     @Test void walkingSkeletonTest() {
         EchoServer classUnderTest = new EchoServer();
-        assertEquals(classUnderTest.walkingSkeletonTest(), "testing 123");
+        assertEquals(classUnderTest, "echo Server");
     }
 }

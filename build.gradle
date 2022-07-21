@@ -3,7 +3,7 @@ plugins {
 }
 apply plugin : "java"
 ext {
-    javaMainClass = "server.Echo"
+    javaMainClass = "server.EchoServer"
 }
 
 application {
