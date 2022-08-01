@@ -1,29 +1,38 @@
 package server;
 
+import Interfaces.InputOutputInterfaces;
+import Interfaces.SocketInterfaces;
+import wrappers.InputOutputWrappers;
+import wrappers.SocketWrappers;
+
 import java.io.*;
-import java.net.ServerSocket;
 
 public class EchoServer {
 
     public static void main(String[] args) throws IOException {
         int clientPort = (args.length > 0) ? Integer.parseInt(args[0]) : 4444;
-        ServerSocket serverSocket = new ServerSocket(clientPort);
-        System.err.println("ESTABLISHED ON LOCALHOST: " + clientPort);
-        var echoServerWrappers = new EchoServerWrappers(serverSocket);
+        var socketWrappers = new SocketWrappers();
+        var echoServerWrappers = new InputOutputWrappers();
+
+        socketWrappers.createNewServerSocket(clientPort);
 
         while(true) {
-            run(echoServerWrappers);
+            run(echoServerWrappers, socketWrappers);
         }
     }
-    static void run(EchoServerInterfaces echoServerWrappers) throws IOException {
-        var clientSocket = echoServerWrappers.acceptClient();
-        echoServerWrappers.createInputStream(clientSocket);
-        echoServerWrappers.createOutputStream(clientSocket);
+    static void run(InputOutputInterfaces inputOutputWrappers, SocketInterfaces socketWrappers) throws IOException {
+        var clientSocket = socketWrappers.acceptClient();
+
+        inputOutputWrappers.createInputStream(clientSocket);
+        inputOutputWrappers.createOutputStream(clientSocket);
+
         String s;
-        while ((s = echoServerWrappers.receivedMessage()) != null) {
-            echoServerWrappers.echoedMessage(s);
+        while ((s = inputOutputWrappers.receivedMessage()) != null) {
+            inputOutputWrappers.echoedMessage(s);
         }
-        echoServerWrappers.closeClientConnection(clientSocket);
+
+        inputOutputWrappers.closeInputOutputStreams();
+        socketWrappers.closeClientConnection(clientSocket);
     }
 
 

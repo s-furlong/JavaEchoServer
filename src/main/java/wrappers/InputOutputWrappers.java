@@ -1,30 +1,20 @@
-package server;
+package wrappers;
 
+import Interfaces.InputOutputInterfaces;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.ServerSocket;
 import java.net.Socket;
 
-public class EchoServerWrappers implements EchoServerInterfaces{
-    private final ServerSocket serverSocket;
+public class InputOutputWrappers implements InputOutputInterfaces {
+
     public BufferedReader input;
     public PrintWriter output;
 
-
-    public EchoServerWrappers(ServerSocket serverSocket) {
-        this.serverSocket = serverSocket;
+    public InputOutputWrappers() {
         this.input = null;
         this.output = null;
-    }
-
-
-    @Override
-    public Socket acceptClient() throws IOException {
-        Socket clientSocket = serverSocket.accept();
-        System.err.println("ACCEPTED CONNECTION");
-        return clientSocket;
     }
 
     public void createInputStream(Socket clientSocket) throws IOException {
@@ -47,12 +37,8 @@ public class EchoServerWrappers implements EchoServerInterfaces{
     }
 
     @Override
-    public void closeClientConnection(Socket clientSocket) throws IOException {
+    public void closeInputOutputStreams() throws IOException {
         input.close();
         output.close();
-        clientSocket.close();
-        System.err.println("CONNECTION WITH THE CLIENT HAS ENDED");
     }
-
-
 }

@@ -1,65 +1,65 @@
 package server;
 
 
-import mocks.MockWrapper;
+import mocks.MockInputOutWrapper;
+import mocks.MockSocketWrapper;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.net.ServerSocket;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 
-class MockWrappersTests {
+class EchoServerTests {
+
     @Test
-    public void testRunGetsAcceptsClient() throws IOException {
-        ServerSocket serverSocket = new ServerSocket(4000);
-        MockWrapper mockWrapper = new MockWrapper(serverSocket);
-        EchoServer testServer = new EchoServer();
+    public void testRunAcceptsClient() throws IOException {
+        MockInputOutWrapper mockInputOutputWrapper = new MockInputOutWrapper();
+        MockSocketWrapper mockSocketWrapper = new MockSocketWrapper();
 
-        testServer.run(mockWrapper);
+        EchoServer.run(mockInputOutputWrapper, mockSocketWrapper);
 
-        assertEquals(1, mockWrapper.getNumberOfCallsToAcceptClient());
+        assertEquals(1, mockSocketWrapper.getNumberOfCallsToAcceptClient());
     }
+
     @Test
     public void testRunCreatesInputStream() throws IOException {
-        ServerSocket serverSocket = new ServerSocket(4444);
-        MockWrapper mockWrapper = new MockWrapper(serverSocket);
-        EchoServer testServer = new EchoServer();
+        MockInputOutWrapper mockInputOutputWrapper = new MockInputOutWrapper();
+        MockSocketWrapper mockSocketWrapper = new MockSocketWrapper();
 
-        testServer.run(mockWrapper);
+        EchoServer.run(mockInputOutputWrapper, mockSocketWrapper);
 
-        assertEquals(1, mockWrapper.getNumberOfCallsToCreateInputStream());
+        assertEquals(1, mockInputOutputWrapper.getNumberOfCallsToCreateInputStream());
     }
+
     @Test
     public void testRunCreatesOutputStream() throws IOException {
-        ServerSocket serverSocket = new ServerSocket(4001);
-        MockWrapper mockWrapper = new MockWrapper(serverSocket);
-        EchoServer testServer = new EchoServer();
+        MockInputOutWrapper mockInputOutputWrapper = new MockInputOutWrapper();
+        MockSocketWrapper mockSocketWrapper = new MockSocketWrapper();
 
-        testServer.run(mockWrapper);
+        EchoServer.run(mockInputOutputWrapper, mockSocketWrapper);
 
-        assertEquals(1, mockWrapper.getNumberOfCallsToCreateOutStream());
+        assertEquals(1, mockInputOutputWrapper.getNumberOfCallsToCreateOutStream());
     }
+
     @Test
     public void testRunReceivesMessages() throws IOException {
-        ServerSocket serverSocket = new ServerSocket(4002);
-        MockWrapper mockWrapper = new MockWrapper(serverSocket);
-        EchoServer testServer = new EchoServer();
+        MockInputOutWrapper mockInputOutputWrapper = new MockInputOutWrapper();
+        MockSocketWrapper mockSocketWrapper = new MockSocketWrapper();
 
-        testServer.run(mockWrapper);
+        EchoServer.run(mockInputOutputWrapper, mockSocketWrapper);
+        String s = "hello";
 
-        assertEquals(1, mockWrapper.getNumberOfCallsReceiveMessages());
+        assertEquals("hello", mockInputOutputWrapper.setReceivedMessage(s));
     }
-//    @Test
-//    public void testRunEchoesMessage() throws IOException {
-//        ServerSocket serverSocket = new ServerSocket(4003);
-//        MockWrapper mockWrapper = new MockWrapper(serverSocket);
-//        EchoServer testServer = new EchoServer();
-//        String s = "Hello World";
-//        mockWrapper.setReceivedMessage(s);
-//        testServer.run(mockWrapper);
-//
-//        assertEquals(1, mockWrapper.getNumberOfCallsEchoedMessage());
-//    }
+
+    @Test
+    public void testRunCallsReceivedMessage() throws IOException {
+        MockInputOutWrapper mockInputOutputWrapper = new MockInputOutWrapper();
+        MockSocketWrapper mockSocketWrapper = new MockSocketWrapper();
+
+        EchoServer.run(mockInputOutputWrapper, mockSocketWrapper);
+
+        assertEquals(1, mockInputOutputWrapper.getNumberOfCallsReceiveMessages());
+    }
 }
