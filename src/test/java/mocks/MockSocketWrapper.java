@@ -3,18 +3,16 @@ package mocks;
 import Interfaces.SocketInterfaces;
 
 import java.io.IOException;
-import java.net.ServerSocket;
 import java.net.Socket;
 
 public class MockSocketWrapper implements SocketInterfaces {
     private int getNumberOfCallsToAcceptClient = 0;
     private int getCallToCreateServerSocket = 0;
-    private int clientPort = 4444;
+    private int getNumberOfCallsToCloseClientConnection = 0;
 
     @Override
-    public ServerSocket createNewServerSocket(int clientPort) throws IOException {
+    public void createNewServerSocket(int clientPort) {
         getCallToCreateServerSocket++;
-        return null;
     }
     @Override
     public Socket acceptClient() {
@@ -23,13 +21,20 @@ public class MockSocketWrapper implements SocketInterfaces {
     }
 
     @Override
-    public void closeClientConnection(Socket clientSocket) throws IOException {
+    public void closeClientConnection(Socket clientSocket) {
+        getNumberOfCallsToCloseClientConnection++;
 
     }
     public int getNumberOfCallsToAcceptClient() {
         return getNumberOfCallsToAcceptClient;
     }
-    public int getCallToCreateSocket() {
+
+    public int getCallToCreateServerSocket() {
         return getCallToCreateServerSocket;
     }
+
+    public int getNumberOfCallsToCloseClientConnection() {
+        return getNumberOfCallsToCloseClientConnection;
+    }
+
 }
